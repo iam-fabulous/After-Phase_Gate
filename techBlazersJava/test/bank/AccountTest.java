@@ -1,75 +1,93 @@
 package bank;
 
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class AccountTest1 {
+public class AccountTest {
     Account account;
 
     @BeforeEach
-    public void setup(){
-        account = new Account(1, "Ebuka", "chuks", "1234");
+    public void setUp() {
+        account = new Account("firstName", "lastName", "1234");
     }
-
-
 
     @Test
-    public void newAccount_balanceIsZeroTest(){
-        Account account = new Account(1, "femi", "jacob", "0000");
-        int result = account.getBalance();
-       assertEquals(0, result);
-//        account.setBalance(0);
+    public void newAccount_balanceIsZeroTest() {
+        assertEquals(0, account.getBalance("1234"));
     }
 
-//    @Test
-//    public void testMode(){
-//        account.getBalance();
-//    }
+    @Test
+    public void newAccount_CanDepositTest(){
+        account.deposit(2000);
+        assertEquals(2000, account.getBalance("1234"));
+    }
 
-//    @Test
-//    public void newAccount_canDepositTest(){
-//        account.setBalance(2000);
-//        assertEquals(2000, account.getBalance());
-//    }
-//
-//    @Test
-//    public void newAccount_canDepositOnlyPositiveTest(){
-//        account.setBalance(2000);
-//        assertEquals(2000, account.getBalance());
-//        account.setBalance(-2000);
-//        assertEquals(2000, account.getBalance());
-//    }
-//
-//    @Test
-//    public void newAccount_balanceCanAddDepositTest(){
-//        account.setBalance(2000);
-//        assertEquals(2000, account.getBalance());
-//        account.setBalance(3000);
-//        assertEquals(5000, account.getBalance());
-//    }
-//
-//    @Test
-//    public void newAccount_canWithdrawTest(){
-//        account.setBalance(2000);
-//        account.withdraw(1000);
-//        assertEquals(1000, account.getBalance());
-//    }
-//
-//    @Test
-//        public void newAccount_cannotWithdrawMoreThanBalanceTest(){
-//        account.setBalance(2000);
-//        account.withdraw(5000);
-//        assertEquals(2000, account.getBalance());
-//    }
-//
-//    @Test
-//        public void newAccount_cannotWithdrawNegativeAmountTest(){
-//        account.setBalance(2000);
-//        account.withdraw(-1000);
-//        assertEquals(2000, account.getBalance());
-//    }
+    @Test
+    public void newAccount_CanOnlyDepositPositiveTest(){
+        account.deposit(2000);
+        assertEquals(2000, account.getBalance("1234"));
+        account.deposit(-2000);
+        assertEquals(2000, account.getBalance("1234"));
+    }
+
+    @Test
+    public void newAccount_balanceCanAddDeposit(){
+        account.deposit(2000);
+        assertEquals(2000, account.getBalance("1234"));
+        account.deposit(2000);
+        assertEquals(4000, account.getBalance("1234"));
+    }
+
+    @Test
+    public void newAccount_withdraw(){
+        account.deposit(2000);
+        assertEquals(2000, account.getBalance("1234"));
+        account.withdraw(1000, "1234");
+        assertEquals(1000, account.getBalance("1234"));
+    }
+
+    @Test
+    public void newAccount_cannotWithdrawMoreThanBalance(){
+        account.deposit(2000);
+        assertEquals(2000, account.getBalance("1234"));
+        account.withdraw(3000, "1234");
+        assertEquals(2000, account.getBalance("1234"));
+    }
+
+    @Test
+    public void newAccount_cannotWithdrawNegativeAmount(){
+        account.deposit(2000);
+        assertEquals(2000, account.getBalance("1234"));
+        account.withdraw(-2000, "1234");
+        assertEquals(2000, account.getBalance("1234"));
+    }
+
+    @Test
+    public void newAccount_cannotWithdrawZeroAmount(){
+        account.deposit(2000);
+        assertEquals(2000, account.getBalance("1234"));
+        account.withdraw(0, "1234");
+        assertEquals(2000, account.getBalance("1234"));
+    }
+
+    @Test
+    public void newAccount_updatePin(){
+        account.deposit(2000);
+        assertEquals(2000, account.getBalance("1234"));
+        account.withdraw(1000, "1234");
+        assertEquals(1000, account.getBalance("1234"));
+        account.updatePin("1234", "1111");
+        account.withdraw(500, "1111");
+        assertEquals(500, account.getBalance("1111"));
+
+    }
+
+    @Test
+    public void newAccount_can_get_firstName(){
+
+        assertEquals("firstName", account.getFirstName());
+    }
 }

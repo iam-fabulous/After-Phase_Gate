@@ -1,4 +1,7 @@
 package bank;
 
-public class IncorrectPinException {
+public class IncorrectPinException extends RuntimeException {
+    public IncorrectPinException(String message) {
+        super(message);
+    }
 }
